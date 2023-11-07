@@ -4,7 +4,7 @@
   "description": "Wing Platform for AWS CDK",
   "publishConfig": {
     "access": "public",
-    "registry": "https://npm.pkg.github.com/",
+    "registry": "https://registry.npmjs.org",
     "tag": "latest"
   },
   "main": "index.js",
