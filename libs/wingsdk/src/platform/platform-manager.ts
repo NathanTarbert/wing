@@ -12,7 +12,7 @@ interface PlatformManagerOptions {
   readonly platformPaths?: string[];
 }
 
-const BUILTIN_PLATFORMS = ["awscdk", "tf-aws", "tf-azure", "tf-gcp", "sim"];
+const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
 
 /** @internal */
 export class PlatformManager {
@@ -63,18 +63,44 @@ export class PlatformManager {
    * @param customPlatformPath path to a custom platform
    */
   private loadCustomPlatform(customPlatformPath: string) {
+    console.log('Starting to load custom platform:', customPlatformPath);
+  
+    const isScoped = customPlatformPath.startsWith('@');
+    console.log('Is the custom platform scoped?', isScoped);
+  
     const modulePaths = module.paths;
-    const platformDir = dirname(customPlatformPath);
+    console.log('Original module paths:', modulePaths);
+  
+    const platformBaseDir = isScoped ? dirname(dirname(customPlatformPath)) : dirname(customPlatformPath);
+    console.log('Platform base directory:', platformBaseDir);
+  
+    const platformDir = join(platformBaseDir, 'node_modules');
+    console.log('Platform directory:', platformDir);
+  
+    const fullCustomPlatformPath = customPlatformPath.endsWith('.js')
+    ? customPlatformPath
+    : isScoped 
+      ? join(platformDir, `${customPlatformPath}/lib/index.js`) 
+      : `${customPlatformPath}/index.js`;
 
-    const requireResolve = (path: string) =>
-      require.resolve(path, {
-        paths: [...modulePaths, platformDir],
+    console.log('Full custom platform path:', fullCustomPlatformPath);
+
+    const customPlatformLibDir = join(platformBaseDir, 'node_modules', '@hasanaburayyan', 'awscdk', 'lib');
+    console.log('Custom platform lib directory:', customPlatformLibDir);
+
+    const requireResolve = (path: string) => {
+      console.log('Resolving path:', path);
+      return require.resolve(path, {
+        paths: [...modulePaths, platformDir, customPlatformLibDir],
       });
-
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const platformRequire = (path: string) => require(requireResolve(path));
+    };
+  
+    const platformRequire = (path: string) => {
+      console.log('Requiring module:', path);
+      return require(requireResolve(path));
+    };
     platformRequire.resolve = requireResolve;
-
+  
     const platformExports = {};
     const context = vm.createContext({
       require: platformRequire,
@@ -83,16 +109,22 @@ export class PlatformManager {
       process,
       __dirname: customPlatformPath,
     });
-
-    const fullCustomPlatformPath = customPlatformPath.endsWith(".js")
-      ? customPlatformPath
-      : `${customPlatformPath}/index.js`;
-
-    const platformCode = readFileSync(fullCustomPlatformPath, "utf-8");
-    const script = new vm.Script(platformCode);
-    script.runInContext(context);
-
-    this.platformInstances.push(new (platformExports as any).Platform());
+  
+    try {
+      const platformCode = readFileSync(fullCustomPlatformPath, 'utf-8');
+      console.log('Platform code read successfully.');
+  
+      const script = new vm.Script(platformCode);
+      console.log('Script created, about to run in context.');
+  
+      script.runInContext(context);
+      console.log('Script ran successfully in context.');
+  
+      this.platformInstances.push(new (platformExports as any).Platform());
+      console.log('Platform instance created and pushed.');
+    } catch (error) {
+      console.error('An error occurred while loading the custom platform:', error);
+    }
   }
 
   private createPlatformInstances() {

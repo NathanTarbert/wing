@@ -317,6 +317,10 @@ async function runPreflightCodeInVm(
 function resolvePlatformPaths(platform: string[]): string {
   const resolvedPluginPaths: string[] = [];
   for (const plugin of platform) {
+    if (plugin.startsWith("@")) {
+      resolvedPluginPaths.push(plugin);
+      continue;
+    }
     resolvedPluginPaths.push(resolve(process.cwd(), plugin));
   }
   return resolvedPluginPaths.join(";");

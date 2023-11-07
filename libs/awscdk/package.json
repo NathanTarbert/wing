@@ -1,6 +1,6 @@
 {
   "name": "@hasanaburayyan/awscdk",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Wing Platform for AWS CDK",
   "publishConfig": {
     "access": "public",
@@ -12,10 +12,8 @@
   "dependencies": {
     "aws-cdk-lib": "^2.64.0",
     "constructs": "~10.2.69",
-    "safe-stable-stringify": "^2.4.3"
-  },
-  "devDependencies": {
-    "@winglang/sdk": "workspace:^"
+    "safe-stable-stringify": "^2.4.3",
+    "@winglang/sdk": "0.44.9"
   },
   "files": [
     "lib"

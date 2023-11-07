@@ -1105,6 +1105,9 @@ importers:
 
   libs/awscdk:
     dependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../wingsdk
       aws-cdk-lib:
         specifier: ^2.64.0
         version: 2.100.0(constructs@10.2.70)
@@ -1114,10 +1117,6 @@ importers:
       safe-stable-stringify:
         specifier: ^2.4.3
         version: 2.4.3
-    devDependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../wingsdk
 
   libs/tree-sitter-wing:
     dependencies:
