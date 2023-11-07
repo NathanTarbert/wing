@@ -1,0 +1,20 @@
+{
+  "name": "@hasanlibs/awscdk",
+  "version": "0.0.1",
+  "description": "Wing Platform for AWS CDK",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/",
+    "tag": "latest"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "aws-cdk-lib": "^2.64.0",
+    "constructs": "~10.2.69",
+    "safe-stable-stringify": "^2.4.3"
+  },
+  "devDependencies": {
+    "@winglang/sdk": "workspace:^"
+  }
+}

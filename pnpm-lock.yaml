@@ -1103,6 +1103,22 @@ importers:
 
   examples/wing-fixture: {}
 
+  libs/awscdk:
+    dependencies:
+      aws-cdk-lib:
+        specifier: ^2.64.0
+        version: 2.100.0(constructs@10.2.70)
+      constructs:
+        specifier: ~10.2.69
+        version: 10.2.70
+      safe-stable-stringify:
+        specifier: ^2.4.3
+        version: 2.4.3
+    devDependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../wingsdk
+
   libs/tree-sitter-wing:
     dependencies:
       nan:
@@ -14019,7 +14035,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231103
+      typescript: 5.4.0-dev.20231107
     dev: true
 
   /dset@3.1.2:
@@ -23494,8 +23510,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231103:
-    resolution: {integrity: sha512-XOrpoRg1DWN7ei3AFomL+UrpRBseaODTiWWRfZd6AVeT7ODLjQZ+CDUxK6Aj2XPvEthIOaqijvwIxZe6vlNwlQ==}
+  /typescript@5.4.0-dev.20231107:
+    resolution: {integrity: sha512-4bQlfsyFjzZMo1bSLEkFJEcvuQ64pgE0S/BpdWu16lYsQOfJZtntZIyWdED3h+e96IMtVgrC6sxzfPZhj4J/dw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
