@@ -1,6 +1,6 @@
 {
   "name": "@hasanaburayyan/awscdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Wing Platform for AWS CDK",
   "publishConfig": {
     "access": "public",
@@ -16,5 +16,8 @@
   },
   "devDependencies": {
     "@winglang/sdk": "workspace:^"
-  }
+  },
+  "files": [
+    "lib"
+  ]
 }
