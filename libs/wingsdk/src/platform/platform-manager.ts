@@ -63,19 +63,10 @@ export class PlatformManager {
    * @param customPlatformPath path to a custom platform
    */
   private loadCustomPlatform(customPlatformPath: string) {
-    console.log('Starting to load custom platform:', customPlatformPath);
-  
     const isScoped = customPlatformPath.startsWith('@');
-    console.log('Is the custom platform scoped?', isScoped);
-  
     const modulePaths = module.paths;
-    console.log('Original module paths:', modulePaths);
-  
     const platformBaseDir = isScoped ? dirname(dirname(customPlatformPath)) : dirname(customPlatformPath);
-    console.log('Platform base directory:', platformBaseDir);
-  
     const platformDir = join(platformBaseDir, 'node_modules');
-    console.log('Platform directory:', platformDir);
   
     const fullCustomPlatformPath = customPlatformPath.endsWith('.js')
     ? customPlatformPath
@@ -83,22 +74,23 @@ export class PlatformManager {
       ? join(platformDir, `${customPlatformPath}/lib/index.js`) 
       : `${customPlatformPath}/index.js`;
 
-    console.log('Full custom platform path:', fullCustomPlatformPath);
+    const customPlatformLibDir = join(platformBaseDir, 'node_modules', '@hasanaburayyan', 'awscdk', 'lib'); // TODO: parse this from path
 
-    const customPlatformLibDir = join(platformBaseDir, 'node_modules', '@hasanaburayyan', 'awscdk', 'lib');
-    console.log('Custom platform lib directory:', customPlatformLibDir);
+    // const pathToRead = isBuiltin
+    //   ? join(__dirname, `../target-${platformName}/platform`)
+    //   : join(platformPath);
 
+    const resolvablePaths = [...modulePaths, __dirname, platformDir, customPlatformLibDir];
     const requireResolve = (path: string) => {
-      console.log('Resolving path:', path);
       return require.resolve(path, {
-        paths: [...modulePaths, platformDir, customPlatformLibDir],
+        paths: resolvablePaths,
       });
     };
   
     const platformRequire = (path: string) => {
-      console.log('Requiring module:', path);
       return require(requireResolve(path));
     };
+
     platformRequire.resolve = requireResolve;
   
     const platformExports = {};
@@ -112,16 +104,9 @@ export class PlatformManager {
   
     try {
       const platformCode = readFileSync(fullCustomPlatformPath, 'utf-8');
-      console.log('Platform code read successfully.');
-  
       const script = new vm.Script(platformCode);
-      console.log('Script created, about to run in context.');
-  
       script.runInContext(context);
-      console.log('Script ran successfully in context.');
-  
       this.platformInstances.push(new (platformExports as any).Platform());
-      console.log('Platform instance created and pushed.');
     } catch (error) {
       console.error('An error occurred while loading the custom platform:', error);
     }

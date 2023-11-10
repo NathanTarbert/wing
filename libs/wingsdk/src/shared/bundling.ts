@@ -23,6 +23,7 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   mkdirSync(outdir, { recursive: true });
   const outfile = join(outdir, "index.js");
 
+  console.log("SDK PATH: ", SDK_PATH);
   let esbuild = buildSync({
     bundle: true,
     entryPoints: [normalPath(resolve(entrypoint))],

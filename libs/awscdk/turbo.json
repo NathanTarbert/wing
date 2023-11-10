@@ -8,6 +8,13 @@
       "outputs": [
         "lib/**"
       ]
+    },
+    "test": {
+      "dependsOn": ["compile"]
+    },
+    "package": {
+      "dependsOn": ["compile"],
+      "outputs": ["../../dist/hasanaburayyan-awscdk-*.tgz"]
     }
   }
 }

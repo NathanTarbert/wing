@@ -116,6 +116,11 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
     return platform;
   }
 
+  if (platform.startsWith("@")) {
+    return "custom"; // TODO: dont do thi
+    // return new (require(resolve(join("node_modules", platform, "lib", "platform.js")))).Platform().target;
+  }
+
   // If its a custom platform, then we need to load it and get the model
   const platformPath = resolve(platform);
 
